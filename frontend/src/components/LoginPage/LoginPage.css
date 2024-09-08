@@ -1,0 +1,91 @@
+html, body {
+    height: 100%;
+    margin: 0;
+ 
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    position: relative;
+}
+
+.card {
+    position: relative;
+    max-width: 400px;
+    height: auto; /* Ajustar el tamaño según tus necesidades */
+    border-radius: 25px;
+    border: none;
+    box-shadow: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.card-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.3); /* Fondo blanco con transparencia */
+    border-radius: 25px; /* Mantiene los bordes redondeados */
+    z-index: 1; /* Capa detrás del contenido */
+}
+
+.card-body {
+    position: relative;
+    z-index: 2; /* Asegura que el contenido esté sobre el fondo */
+    width: 100%;
+    opacity: 1; /* Asegura que el contenido sea completamente visible */
+}
+
+.form-signin {
+    width: 100%;
+    max-width: 330px;
+    margin: auto;
+}
+
+.form-floating, .checkbox, .btn, p {
+    opacity: 1; /* Asegura que estos elementos sean completamente visibles */
+}
+
+.mb-4 {
+    margin-bottom: 1.5rem;
+}
+
+.backimage{
+    background-image: url('../../images/ferns-7438928_1280.jpg');
+    background-size: cover;
+    background-position: center center;
+}
+
+.color-override{
+    color: #123524 !important;
+}
+
+.btn-override{
+    --bs-btn-bg:#123524;
+    color: white !important;
+}
+
+.btn:hover{
+    background-color:#065320e3
+}
+
+/* Media query para pantallas medianas y superiores */
+@media (min-width: 768px) {
+    .card {
+        max-width: 40%;  /* Ajusta este valor según el tamaño que desees */
+        max-height: 80vh; /* Ajusta la altura máxima */
+    }
+
+    .card img {
+        height: 100%;
+        object-fit: cover;
+    }
+}
+

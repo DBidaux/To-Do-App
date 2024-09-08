@@ -1,0 +1,30 @@
+.backimage{
+    background-image: url('../../images/ferns-7438928_1280.jpg');
+    background-size: cover;
+    background-position: center center;
+}
+
+.transp{
+    opacity: 0.8;
+}
+
+.no-transp{
+    opacity: 1;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.39); /* Fondo blanco con 80% de opacidad */
+    backdrop-filter: blur(10px); /* Opcional: agrega un desenfoque de fondo para un efecto adicional */
+}
+
+.color-override{
+    color: #123524;
+}
+
+.btn-override{
+    --bs-btn-bg:#123524;
+    color: white !important;
+}
+.btn:hover{
+    background-color:#065320e3
+}
