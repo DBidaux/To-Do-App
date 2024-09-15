@@ -1,8 +1,11 @@
 from flask import Flask
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
-from flask_jwt_extended import JWTManager  # Importar JWTManager
+# Importar JWTManager
+from flask_jwt_extended import JWTManager
 from datetime import timedelta
+
+from .scheduler import start_scheduler
 
 # Importaciones relativas
 from .config import Config
@@ -20,6 +23,7 @@ app = Flask(__name__)
 app.config.from_object(Config)
 bcrypt = Bcrypt(app)
 CORS(app)
+start_scheduler(app)
 
 # Inicializamos BD
 db.init_app(app)
@@ -27,7 +31,7 @@ db.init_app(app)
 # Configuración de JWT
 # Cambia esto por una clave más segura
 app.config["JWT_SECRET_KEY"] = "super-secret-key"
-app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=3)
 
 # Inicializamos JWTManager
 jwt = JWTManager(app)
@@ -43,6 +47,7 @@ app.register_blueprint(auth_bp)
 # Crear BD si no existe
 with app.app_context():
     db.create_all()
+
 
 if __name__ == "__main__":
     app.run(debug=True)

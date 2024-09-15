@@ -1,0 +1,99 @@
+/* TodoLists.css */
+body {
+  font-family: Arial, sans-serif;
+  
+}
+
+.todo-lists-container {
+  text-align: center;
+  color: white;
+  background-image: url('../../images/ferns-7438928_1280.jpg');
+  background-size: cover;
+    background-position: center center;
+  
+}
+
+.todo-lists {
+  display: flex;
+  justify-content: space-around;
+}
+
+.todo-column {
+  background-color: #333333c2;
+  padding: 20px;
+  border-radius: 15px;
+  width: 30%;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+h2 {
+  background-color: #444;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.todo-item {
+  background-color: #444;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  word-wrap: break-word;
+  overflow: hidden;
+  min-height: 60px;
+  max-width: 100%; /* Permitir que la tarjeta ocupe el 100% del contenedor */
+}
+
+.todo-item:hover {
+  background-color: #8f8f8f;
+  box-shadow: 0px 4px 8px rgba(9, 30, 66, 0.25), 0px 2px 4px rgba(9, 30, 66, 0.15);
+}
+
+.todo-title {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #fff;
+  width: 100%; /* Ocupar todo el ancho */
+  word-wrap: break-word;
+}
+
+.todo-description {
+  color: #ccc;
+  flex-grow: 1;
+  white-space: normal; /* Permitir que el texto de la descripción se ajuste */
+  word-wrap: break-word;
+  overflow-wrap: break-word; /* Romper palabras largas */
+  width: 100%; /* Asegurarse de que la descripción ocupe todo el ancho */
+}
+
+.erase-btn {
+  align-self: flex-end; /* Mantener el botón a la derecha */
+  background: transparent;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+}
+
+.erase-btn:hover {
+  color: #de350b;
+}
+
+.h-50vh {
+  height: 65vh;
+}
+
+.btn-override{
+  --bs-btn-bg:#123524;
+  color: white !important;
+}

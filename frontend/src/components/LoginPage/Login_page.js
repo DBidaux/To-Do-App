@@ -9,6 +9,7 @@ export default function LoginPage() {
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [id, setId] = useState('')
     const [errorMessage, setErrorMessage] = useState('')
     const [successMessage, setSuccessMessage] = useState('')
 
@@ -20,6 +21,7 @@ export default function LoginPage() {
         const userData = {
             email: email,
             password: password,
+            user_id: id
         };
 
         try {
@@ -37,6 +39,7 @@ export default function LoginPage() {
                 setSuccessMessage(result.message);
                 setErrorMessage('');
                 localStorage.setItem('token', result.access_token)
+                localStorage.setItem('user_id', result.user_id)
                 navigate("/home")
             } else {
                 setErrorMessage(result.message);
@@ -60,7 +63,7 @@ export default function LoginPage() {
                     <div className="col-md-6">
                         <img
                             src={imglogin}
-                            className="img-fluid rounded-start"
+                            className="img-fluid rounded"
                             alt="Foto cuadrilla"
                             style={{ objectFit: 'cover', width: '100%', height: '100%' }}
                         />

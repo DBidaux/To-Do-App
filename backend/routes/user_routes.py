@@ -1,5 +1,8 @@
 from flask import Blueprint, jsonify, request
 from ..models import db, User, Todo, StatusEnum
+from flask_jwt_extended import get_jwt_identity, jwt_required
+from sqlalchemy import and_
+
 
 # Definimos blueprint para rutas de usuarios
 user_bp = Blueprint('user_bp', __name__)
@@ -31,39 +34,74 @@ def get_users():
     ])
 
 
-# Ruta para crear un nuevo to-do para un usuario específico
-@user_bp.route("/users/<int:user_id>/todos", methods=["POST"])
-def create_todo_for_user(user_id):
-    user = User.query.get_or_404(user_id)
+# Ruta para crear un nuevo to-do para el usuario logueado
+@user_bp.route("/newtodo", methods=["POST"])
+@jwt_required()  # Requiere autenticación JWT
+def create_todo_for_user():
     data = request.get_json()
 
-    status = data.get('status', StatusEnum.TODO.value)
+    user_id = get_jwt_identity()  # Obtener el user_id del token
 
-    if status not in StatusEnum.__members__:
+    # Verificar si el status es válido
+    valid_statuses = ["TODO", "IN_PROGRESS", "DONE"]
+    status = data.get('status')
+
+    if status not in valid_statuses:
         return jsonify({"message": "Invalid status value"}), 400
 
+    # Crear una nueva tarea
     new_todo = Todo(
         title=data['title'],
         description=data.get('description', ''),
-        status=StatusEnum[status],
-        user_id=user.id
+        status=status,  # Asignar el status como cadena
+        user_id=user_id
     )
-    db.session.add(new_todo)
-    db.session.commit()
-    return jsonify({"message": "Todo created successfully!"}), 201
 
-# Ruta para obtener todos los to-dos de un usuario
+    try:
+        db.session.add(new_todo)
+        db.session.commit()
+        return jsonify(new_todo.to_dict()), 201
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"message": str(e)}), 500
 
 
-@user_bp.route("/users/<int:user_id>/todos", methods=["GET"])
-def get_todos_for_user(user_id):
-    user = User.query.get_or_404(user_id)
-    todos = Todo.query.filter_by(user_id=user.id).all()
-    return jsonify([
-        {
-            "id": todo.id,
-            "title": todo.title,
-            "description": todo.description,
-            "completed": todo.completed
-        } for todo in todos
-    ])
+# Ruta para obtener todos los to-dos del usuario logueado
+@user_bp.route("/usertodo", methods=["GET"])
+@jwt_required()  # Requiere autenticación JWT
+def get_todos_for_user():
+    user_id = get_jwt_identity()  # Obtener el user_id del token JWT
+    todos = Todo.query.filter(
+        and_(Todo.user_id == user_id, Todo.active == True)).all()
+
+    # Serializamos con to_dict()
+    return jsonify([todo.to_dict() for todo in todos])
+
+
+# Ruta para obtener los detalles del usuario logueado
+@user_bp.route("/userdetails", methods=["GET"])
+@jwt_required()  # Requiere autenticación JWT
+def get_user_details():
+    user_id = get_jwt_identity()  # Obtener el user_id del token JWT
+    user = User.query.get(user_id)  # Obtener el usuario basado en su ID
+
+    if user:
+        return jsonify({
+            "id": user.id,
+            "username": user.username,
+            "email": user.email
+        }), 200
+    else:
+        return jsonify({"message": "User not found"}), 404
+
+# Ruta para obtener los to-dos inactivos del usuario logueado
+
+
+@user_bp.route("/usertodo/inactive", methods=["GET"])
+@jwt_required()  # Requiere autenticación JWT
+def get_inactive_todos_for_user():
+    user_id = get_jwt_identity()  # Obtener el user_id del token JWT
+    todos = Todo.query.filter(
+        and_(Todo.user_id == user_id, Todo.active == False)).all()
+    # Serializamos con to_dict()
+    return jsonify([todo.to_dict() for todo in todos])
